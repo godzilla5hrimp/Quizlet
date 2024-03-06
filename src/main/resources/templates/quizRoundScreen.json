@@ -1,0 +1,11 @@
+{
+  //TODO: have to figure out how to do this schema properly
+  "type": "object",
+  "properties": {
+    "textQuestion": { "type": "text" },
+    "firstQuestion": { "type": "array" },
+    "secondQuestion": { "type": "array" },
+    "thirdQuestion": { "type": "array" },
+    "fourthQuestion": { "type": "array" }
+  }
+}
