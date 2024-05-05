@@ -1,10 +1,19 @@
 package org.godzilla5hrimp.quizlet.service.question;
 
 import java.util.HashMap;
+import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Question {
+    private String id;
     private String textQuestion;
     private String mediaURL;
+    private Boolean isMultipleAnswerQuestion;
+    private List<String> answerList;
 
     public Question(final String textQuestion) {
         this.textQuestion = textQuestion;

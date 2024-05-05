@@ -1,19 +1,25 @@
 package org.godzilla5hrimp.quizlet.service.quiz;
-
-import org.godzilla5hrimp.quizlet.service.question.Question;
-
+import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Quiz {
-    private List<Question> questionList;
+    private String id;
+    private List<String> questionIdList;
+    private Date creationDate;
+    private Date updateDate;
+    private String userCreate;
+    private String userUpdate;
+    private Long version;
+    private JSONPObject jsonQuizExport;
 
     public String exportJson() {
-        String jsonOutput = "";
-        return jsonOutput;
-    }
-
-    public String exportXml() {
-        String xmlOutput = "";
-        return xmlOutput;
+        return jsonQuizExport.toString();
     }
 }

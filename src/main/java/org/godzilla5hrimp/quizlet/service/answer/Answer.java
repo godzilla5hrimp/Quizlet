@@ -2,8 +2,13 @@ package org.godzilla5hrimp.quizlet.service.answer;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import gg.jte.TemplateEngine;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.godzilla5hrimp.quizlet.utils.ColourScheme;
 
+@Getter
+@Setter
 public class Answer {
     @JsonValue
     private String textAnswer;
