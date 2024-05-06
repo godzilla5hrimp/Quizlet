@@ -1,5 +1,5 @@
-//@param org.godzilla5hrimp.quizlet.service.question.Question question
-//@param java.util.List<org.godzilla5hrimp.quizlet.service.answer.Answer> answerList
+@param org.godzilla5hrimp.quizlet.service.question.Question question
+@param java.util.List<org.godzilla5hrimp.quizlet.service.answer.Answer> answerList
 @param org.godzilla5hrimp.quizlet.service.quiz.Quiz quiz
 
 <html lang="en">
