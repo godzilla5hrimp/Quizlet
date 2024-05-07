@@ -32,6 +32,8 @@ test {
 }
 
 flyway {
-    url = 'jdbc:h2:file:./target/foobar'
-    user = 'sa'
+    url = 'jdbc:h2:mem:quizlet'
+    //TODO: add flyway config based on the Project properties
+    user = project.getProperty("dbUser") 
+    password = project.getProperty("dbPassw")
 }
