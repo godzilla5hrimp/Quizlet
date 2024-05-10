@@ -27,7 +27,7 @@ public class Main {
         HikariConfig config = new HikariConfig(""); //TODO: set up a HikariCP property file        
         config.setUsername(System.getenv().get("quizletClient"));
         config.setPassword(System.getenv().get("quizletClientPsw"));
-        Question question = new Question("How are you today?", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.wallpaperup.com%2Fuploads%2Fwallpapers%2F2017%2F10%2F17%2F1115135%2F39703272b54248797175d7de69f610a7.jpg&f=1&nofb=1&ipt=5bbe2f06425e59e300adbae672185697ab76a20552fe0194b529afb87e940516&ipo=images");
+        Question question = new Question("How are you today?", "");
         List<Answer> answerList = Arrays.asList(new Answer("Good", true), new Answer("Bad", false), new Answer("So-so", false), new Answer("Never Better", false));
         //String file = "/home/hillayer/IdeaProjects/Quizlet/src/main/resources/templates/quizRoundScreen.json";
         //String json = Arrays.toString(Files.readAllBytes(Paths.get(file)));

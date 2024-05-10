@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css">
         <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
        <script>
-            apiUrl = "localhost:7000/v1/next";
+            apiUrl = "localhost:7000/v1/next/${quiz.getId()}/";
             function rightAnswer() {
                 alert("You were right!");
             }
