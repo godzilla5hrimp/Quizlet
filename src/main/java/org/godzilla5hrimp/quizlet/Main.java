@@ -35,6 +35,12 @@ public class Main {
         params.put("question", question);
         params.put("answerList", answerList);
         //params.put("jsonEditorSchema", json);
+        app.ws("/quiz/{id}", ws -> {
+            ws.onConnect(ctx -> System.out.println("Connected user"));
+            ws.onMessage(ctx -> {
+                
+            })
+        })
         app.get("/", ctx -> {
             TemplateOutput output = new StringOutput();
             templateEngine.render("quizRound.jte", params, output);

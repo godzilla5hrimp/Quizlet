@@ -43,3 +43,4 @@ bin/
 
 ### JTE ###
 jte-classes/
+/src/resources/dev.properties
