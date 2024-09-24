@@ -38,9 +38,9 @@ public class Main {
         app.ws("/quiz/{id}", ws -> {
             ws.onConnect(ctx -> System.out.println("Connected user"));
             ws.onMessage(ctx -> {
-                
-            })
-        })
+
+            });
+        });
         app.get("/", ctx -> {
             TemplateOutput output = new StringOutput();
             templateEngine.render("quizRound.jte", params, output);
