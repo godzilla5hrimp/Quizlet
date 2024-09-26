@@ -43,5 +43,5 @@ test {
 }
 
 jte {
-    precompile()
+    generate()
 }
