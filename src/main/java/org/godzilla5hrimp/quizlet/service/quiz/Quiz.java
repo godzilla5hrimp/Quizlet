@@ -19,6 +19,10 @@ public class Quiz {
     private Long version;
     private JSONPObject jsonQuizExport;
 
+    public String getId() {
+        return this.id;
+    }
+
     public String exportJson() {
         return jsonQuizExport.toString();
     }
