@@ -5,8 +5,7 @@ plugins {
 }
 
 apply plugin: 'java'
-
-sourceCompatability = 11
+        
 jar {
     manifest {
         attributes(
