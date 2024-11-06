@@ -8,10 +8,9 @@ plugins {
 apply plugin: 'java'
 
 jar {
-    enabled = false
+    destinationDirectory.set(file("$rootDir/build/libs/"))
     manifest {
         attributes 'Main-Class': 'org.godzilla5hrimp.quizlet.Main'
-        destinationDirectory.set(file("$rootDir/build/libs/"))
     }
 }
 
