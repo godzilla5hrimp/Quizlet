@@ -10,9 +10,7 @@ apply plugin: 'java'
 jar {
     enabled = false
     manifest {
-        attributes(
-                'Main-Class': 'org.godzilla5hrimp.quizlet.Main'
-        )
+        attributes 'Main-Class': 'org.godzilla5hrimp.quizlet.Main'
     }
 }
 
