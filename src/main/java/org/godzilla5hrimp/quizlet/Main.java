@@ -1,12 +1,12 @@
 package org.godzilla5hrimp.quizlet;
 
+import io.javalin.Javalin;
 import gg.jte.CodeResolver;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import gg.jte.TemplateOutput;
 import gg.jte.output.StringOutput;
 import gg.jte.resolve.DirectoryCodeResolver;
-import io.javalin.Javalin;
 import org.godzilla5hrimp.quizlet.service.answer.Answer;
 import org.godzilla5hrimp.quizlet.service.question.Question;
 
