@@ -1,0 +1,1 @@
+let ws = new WebSocket("ws://" + localhost.hostname + ":" + location.port + "/quiz/")

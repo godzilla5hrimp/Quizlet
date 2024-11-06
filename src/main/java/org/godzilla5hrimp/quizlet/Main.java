@@ -10,6 +10,7 @@ import gg.jte.resolve.DirectoryCodeResolver;
 import org.godzilla5hrimp.quizlet.service.answer.Answer;
 import org.godzilla5hrimp.quizlet.service.question.Question;
 import org.godzilla5hrimp.quizlet.service.quiz.Quiz;
+import org.godzilla5hrimp.quizlet.service.quizSession.QuizSession;
 
 import com.zaxxer.hikari.HikariConfig;  
 
@@ -28,7 +29,7 @@ public class Main {
         HikariConfig config = new HikariConfig(""); //TODO: set up a HikariCP property file        
         config.setUsername(System.getenv().get("quizletClient"));
         config.setPassword(System.getenv().get("quizletClientPsw"));
-        Quiz quiz = new Quiz();
+        Quiz quiz = new Quiz("firstQuiz");
         //quiz.setQuestionIdList(Arrays.asList("1"));
         Question question = new Question("How are you today?", "");
         List<Answer> answerList = Arrays.asList(new Answer("Good", true), new Answer("Bad", false), new Answer("So-so", false), new Answer("Never Better", false));
@@ -39,6 +40,9 @@ public class Main {
         params.put("answerList", answerList);
         params.put("quiz", quiz);
         //params.put("jsonEditorSchema", json);
+        QuizSession quizSession = new QuizSession("firstSession");
+        quizSession.setQuizId("firstQuiz");
+        params.put("quizSession", quizSession);
         app.ws("/quiz/{id}", ws -> {
             ws.onConnect(ctx -> System.out.println("Connected user"));
             ws.onMessage(ctx -> {
