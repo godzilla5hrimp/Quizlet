@@ -43,4 +43,5 @@ test {
 
 jte {
     precompile()
+    jteExtension('gg.jte.nativeimage.NativeResourcesExtension')
 }
