@@ -11,6 +11,7 @@ jar {
     enabled = false
     manifest {
         attributes 'Main-Class': 'org.godzilla5hrimp.quizlet.Main'
+        destinationDirectory.set(file("$rootDir/build/libs/"))
     }
 }
 
