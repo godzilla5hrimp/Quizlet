@@ -9,6 +9,7 @@ import gg.jte.output.StringOutput;
 import gg.jte.resolve.DirectoryCodeResolver;
 import org.godzilla5hrimp.quizlet.service.answer.Answer;
 import org.godzilla5hrimp.quizlet.service.question.Question;
+import org.godzilla5hrimp.quizlet.service.quiz.Quiz;
 
 import com.zaxxer.hikari.HikariConfig;  
 
@@ -27,6 +28,8 @@ public class Main {
         HikariConfig config = new HikariConfig(""); //TODO: set up a HikariCP property file        
         config.setUsername(System.getenv().get("quizletClient"));
         config.setPassword(System.getenv().get("quizletClientPsw"));
+        Quiz quiz = new Quiz();
+        //quiz.setQuestionIdList(Arrays.asList("1"));
         Question question = new Question("How are you today?", "");
         List<Answer> answerList = Arrays.asList(new Answer("Good", true), new Answer("Bad", false), new Answer("So-so", false), new Answer("Never Better", false));
         //String file = "/home/hillayer/IdeaProjects/Quizlet/src/main/resources/templates/quizRoundScreen.json";
@@ -34,6 +37,7 @@ public class Main {
         Map<String, Object> params = new HashMap<>();
         params.put("question", question);
         params.put("answerList", answerList);
+        params.put("quiz", quiz);
         //params.put("jsonEditorSchema", json);
         app.ws("/quiz/{id}", ws -> {
             ws.onConnect(ctx -> System.out.println("Connected user"));
