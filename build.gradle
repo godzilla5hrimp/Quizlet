@@ -8,9 +8,11 @@ plugins {
 apply plugin: 'java'
 
 jar {
-    destinationDirectory.set(file("$rootDir/build/libs/"))
     manifest {
-        attributes 'Main-Class': 'org.godzilla5hrimp.quizlet.Main'
+        attributes (
+            'Main-Class': 'org.godzilla5hrimp.quizlet.Main',
+            'Class-Path': '/libs/*.jar'
+        )
     }
 }
 
@@ -43,5 +45,4 @@ test {
 
 jte {
     precompile()
-    jteExtension('gg.jte.nativeimage.NativeResourcesExtension')
 }
