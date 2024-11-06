@@ -22,7 +22,7 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) throws IOException {
         CodeResolver codeResolver = new DirectoryCodeResolver(Path.of("./src/main/resources/templates/")); // This is the directory where your .jte files are located.
-        TemplateEngine templateEngine = TemplateEngine.create(codeResolver, ContentType.Html); // Two choices: Plain or Html
+        TemplateEngine templateEngine = TemplateEngine.createPrecompiled(Path.of("./src/main/resources/templates/"), ContentType.Html, (ClassLoader) codeResolver.getClass().getClassLoader()); // Two choices: Plain or Html
         Javalin app = Javalin.create().start(7000);
         HikariConfig config = new HikariConfig(""); //TODO: set up a HikariCP property file        
         config.setUsername(System.getenv().get("quizletClient"));
