@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
         CodeResolver codeResolver = new DirectoryCodeResolver(Path.of("src/main/jte")); // This is the directory where your .jte files are located.
         TemplateEngine templateEngine = TemplateEngine.create(codeResolver, ContentType.Html); // Two choices: Plain or Html
@@ -43,6 +44,8 @@ public class Main {
         params.put("question", question);
         params.put("answerList", answerList);
         params.put("quiz", quiz);
+        final String currentDomain = System.getenv("RAILWAY_PUBLIC_DOMAIN");
+        params.put("currentDomain", currentDomain);
         //params.put("jsonEditorSchema", json);
         QuizSession quizSession = new QuizSession("firstSession");
         quizSession.setQuizId("firstQuiz");

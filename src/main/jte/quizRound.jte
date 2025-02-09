@@ -2,6 +2,7 @@
 @param java.util.List<org.godzilla5hrimp.quizlet.service.answer.Answer> answerList
 @param org.godzilla5hrimp.quizlet.service.quiz.Quiz quiz
 @param org.godzilla5hrimp.quizlet.service.quizSession.QuizSession quizSession
+@param String currentDomain
 
 <html lang="en">
     <head>
@@ -12,7 +13,8 @@
             let usersConnected = 0;
             let id = id => document.getElementById(id);
             //Establish the WebSocket connection and set up event handlers
-            let ws = new WebSocket('ws://localhost:7000/quiz/${quiz.getId()}');
+            let domain = "${currentDomain}";
+            let ws = new WebSocket('ws://' + domain +':7000/quiz/${quiz.getId()}');
             ws.onopen = () => console.log("ws connected");
             ws.onmessage = msg => {
                 console.log("received from server: " + msg.data);
