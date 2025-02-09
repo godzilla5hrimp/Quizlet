@@ -67,9 +67,6 @@ public class Main {
                 System.out.println("user disconnected");
             });
         });
-        app.post("/broadcast/${message}", ctx -> {
-            quizSession.broadcastMessage(ctx.pathParam("message"));
-        });
         app.get("/", ctx -> {
             TemplateOutput output = new StringOutput();
             templateEngine.render("quizRound.jte", params, output);
