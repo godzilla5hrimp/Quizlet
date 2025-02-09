@@ -12,13 +12,14 @@ import org.godzilla5hrimp.quizlet.service.question.Question;
 import org.godzilla5hrimp.quizlet.service.quiz.Quiz;
 import org.godzilla5hrimp.quizlet.service.quizSession.QuizSession;
 
+import com.auth0.jwt.algorithms.Algorithm;
+
 import com.zaxxer.hikari.HikariConfig;  
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 public class Main {
@@ -26,6 +27,9 @@ public class Main {
         CodeResolver codeResolver = new DirectoryCodeResolver(Path.of("src/main/jte")); // This is the directory where your .jte files are located.
         TemplateEngine templateEngine = TemplateEngine.create(codeResolver, ContentType.Html); // Two choices: Plain or Html
         Javalin app = Javalin.create().start(7000);
+        Algorithm algorithm = Algorithm.HMAC256("very_secret");
+        
+        System.out.println(algorithm);
         HikariConfig config = new HikariConfig(""); //TODO: set up a HikariCP property file        
         config.setUsername(System.getenv().get("quizletClient"));
         config.setPassword(System.getenv().get("quizletClientPsw"));
@@ -44,10 +48,27 @@ public class Main {
         quizSession.setQuizId("firstQuiz");
         params.put("quizSession", quizSession);
         app.ws("/quiz/{id}", ws -> {
-            ws.onConnect(ctx -> System.out.println("Connected user"));
+            ws.onConnect(ctx -> { 
+                System.out.println("Connected user");
+                ctx.enableAutomaticPings(10, TimeUnit.SECONDS, null);
+                UUID userId = UUID.randomUUID();
+                ctx.send("welcome");
+                ctx.attribute("userId", userId.toString());
+                if (quizSession.userConnected(ctx.attribute("userId"), ctx)) {
+                    ctx.enableAutomaticPings(10, TimeUnit.MILLISECONDS, null);
+                }
+        });
             ws.onMessage(ctx -> {
-
+                System.out.println("user connected:" + ctx.message());
             });
+
+            ws.onClose(ctx -> {
+                quizSession.userDisconected(ctx.attribute("userId"));
+                System.out.println("user disconnected");
+            });
+        });
+        app.post("/broadcast/${message}", ctx -> {
+            quizSession.broadcastMessage(ctx.pathParam("message"));
         });
         app.get("/", ctx -> {
             TemplateOutput output = new StringOutput();
@@ -56,4 +77,5 @@ public class Main {
             ctx.contentType(String.valueOf(ContentType.Html));
         });
     }
+
 }

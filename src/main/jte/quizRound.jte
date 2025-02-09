@@ -8,13 +8,31 @@
         <title></title>
         <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css">
         <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
-       
+        <script>
+            let usersConnected = 0;
+            let id = id => document.getElementById(id);
+            //Establish the WebSocket connection and set up event handlers
+            let ws = new WebSocket('ws://localhost:7000/quiz/${quiz.getId()}');
+            ws.onopen = () => console.log("ws connected");
+            ws.onmessage = msg => {
+                console.log("received from server: " + msg.data);
+                if (msg.data === 'userConnected') {
+                    usersConnected++;
+                    document.getElementById("userCounter").innerHTML = usersConnected;
+                    console.log("user added");
+                } else if (msg.data === 'userDisconnected') {
+                    usersConnected--;
+                    document.getElementById("userCounter").innerHTML = usersConnected;
+                    console.log("user removed");
+                }
+            }
+        </script>
     </head>
     <div class="quiz-step flex flex-col gap-3 h-screen justify-stretch">
+            <span id="userCounter">0</span>
         <div class="quiz-connected flex flex-row h-screen">
-            ${quizSession.getUsersConnected().size()}
+            usersConnected
         </div> 
-        @template.questionBlock(question = question)
         <div class="answer-block flex flex-row gap-3 place-content-center grid grid-cols-2">
             @for(int i = 0; i < answerList.size(); i++)
                @template.answerButton(answer = answerList.get(i), questionNumber = i)
