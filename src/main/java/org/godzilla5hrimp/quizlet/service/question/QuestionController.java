@@ -11,12 +11,5 @@ public class QuestionController {
     void QuestionController(final Javalin instance, final Quiz quiz) {
         this.workingInstance = instance;
         this.quiz = quiz;
-        init();
     }
-
-    private void init() {
-        workingInstance.get("/v1/next/{quizId}", ctx -> {
-        });      
-    }
-    
 }
