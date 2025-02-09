@@ -33,7 +33,7 @@ public class QuizSession {
         this.usersConnected.add(userId);
         this.usersSessions.put(userId, userConnection);
         usersSessions.forEach((k, v) -> {
-            v.send("userConnected");
+            v.send("{\"usersConnected\":" + usersSessions.size() + "}");
         });
         return true;
     }
@@ -47,9 +47,10 @@ public class QuizSession {
             return false;
         } else {
             this.usersConnected.remove(userId);
+            this.usersSessions.remove(userId);
             System.out.println("Removed " + userId + ", number left" + usersConnected.size());
-            usersSessions.forEach((k, v) -> {
-                v.send("userDisconnected");
+            usersSessions.forEach((userKey, userSession) -> {
+                userSession.send("{\"usersConnected\":" + usersSessions.size() + "}");
             });
             return true;
         }

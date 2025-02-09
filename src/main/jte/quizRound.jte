@@ -18,14 +18,10 @@
             ws.onopen = () => console.log("ws connected");
             ws.onmessage = msg => {
                 console.log("received from server: " + msg.data);
-                if (msg.data === 'userConnected') {
-                    usersConnected++;
+                if (msg.data.includes('usersConnected')) {
+                    usersConnected = JSON.parse(msg.data).usersConnected;
                     document.getElementById("userCounter").innerHTML = usersConnected;
                     console.log("user added");
-                } else if (msg.data === 'userDisconnected') {
-                    usersConnected--;
-                    document.getElementById("userCounter").innerHTML = usersConnected;
-                    console.log("user removed");
                 }
             }
         </script>
