@@ -1,6 +1,6 @@
 @param org.godzilla5hrimp.quizlet.service.question.Question question
 
-<div class="question-block bg-blue-500 justify-center align-center text-white font-bold py-4 px-4 rounded text-center h-full place-content-center">
+<div class="question-block bg-blue-500 justify-center align-center text-white font-bold py-4 px-4 rounded text-center h-max place-content-center">
     <p>
         ${question.getTextQuestion()}
     </p>

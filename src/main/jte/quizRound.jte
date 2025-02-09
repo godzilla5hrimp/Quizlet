@@ -11,6 +11,7 @@
         <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
         <script>
             let usersConnected = 0;
+            let currentQuestion = 0;
             let id = id => document.getElementById(id);
             //Establish the WebSocket connection and set up event handlers
             let domain = "${currentDomain}";
@@ -26,11 +27,13 @@
             }
         </script>
     </head>
+    <button id="userCounter" class="userCounter font-semibold bg-blue-500 hover:bg-blue-700 rounded w-10 h-10 text-center inline-block align-middle">
+        0
+    </button>
     <div class="quiz-step flex flex-col gap-3 h-screen justify-stretch">
-            <span id="userCounter">0</span>
-        <div class="quiz-connected flex flex-row h-screen">
-            usersConnected
-        </div> 
+        <div class="question-block">
+            @template.questionBlock(question = question)
+        </div>
         <div class="answer-block flex flex-row gap-3 place-content-center grid grid-cols-2">
             @for(int i = 0; i < answerList.size(); i++)
                @template.answerButton(answer = answerList.get(i), questionNumber = i)
