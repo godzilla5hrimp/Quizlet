@@ -17,6 +17,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.zaxxer.hikari.HikariConfig;  
 
 import java.io.IOException;
+import java.nio.channels.ClosedChannelException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -68,6 +69,11 @@ public class Main {
             ws.onClose(ctx -> {
                 quizSession.userDisconected(ctx.attribute("userId"));
                 System.out.println("user disconnected");
+            });
+            ws.onError(ctx -> {
+                if (ctx.error() instanceof ClosedChannelException) {
+                    quizSession.userDisconected(ctx.attribute("userId"));
+                }
             });
         });
         app.get("/", ctx -> {
