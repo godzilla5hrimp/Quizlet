@@ -14,7 +14,7 @@
             let id = id => document.getElementById(id);
             //Establish the WebSocket connection and set up event handlers
             let domain = "${currentDomain}";
-            let ws = new WebSocket('ws://' + domain +':7000/quiz/${quiz.getId()}');
+            let ws = new WebSocket('ws://' + domain +'/quiz/${quiz.getId()}');
             ws.onopen = () => console.log("ws connected");
             ws.onmessage = msg => {
                 console.log("received from server: " + msg.data);
