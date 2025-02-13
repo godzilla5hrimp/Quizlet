@@ -32,12 +32,15 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation("io.javalin:javalin:5.6.3")
+    implementation("org.flywaydb:flyway-core:9.22.3")
     implementation("gg.jte:jte:3.1.13")
     implementation("org.slf4j:slf4j-simple:2.0.9")
     implementation ("com.zaxxer:HikariCP:5.1.0")
     implementation ("com.fasterxml.jackson.core:jackson-annotations:2.16.1")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.10.0")
     implementation ("com.auth0:java-jwt:4.4.0")
+    implementation ("org.postgresql:postgresql:42.7.5") 
+    runtimeOnly ("org.postgresql:postgresql:42.7.5") 
 }
 
 test {
