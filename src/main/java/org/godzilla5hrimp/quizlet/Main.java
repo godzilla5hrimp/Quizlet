@@ -54,7 +54,7 @@ public class Main {
         quizSession.setQuizId("firstQuiz");
         params.put("quizSession", quizSession);
         Flyway flyway = Flyway.configure()
-            .dataSource(System.getenv("DATABASE_URL").toString(), 
+            .dataSource(System.getenv("DATABASE_PUBLIC_URL").toString(), 
                 System.getenv().get("POSTGRES_USER").toString(), System.getenv("POSTGRES_PASSWORD").toString())
             .load();
         flyway.migrate();
