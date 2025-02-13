@@ -7,6 +7,8 @@ import gg.jte.TemplateEngine;
 import gg.jte.TemplateOutput;
 import gg.jte.output.StringOutput;
 import gg.jte.resolve.DirectoryCodeResolver;
+
+import org.flywaydb.core.Flyway;
 import org.godzilla5hrimp.quizlet.service.answer.Answer;
 import org.godzilla5hrimp.quizlet.service.question.Question;
 import org.godzilla5hrimp.quizlet.service.quiz.Quiz;
@@ -51,6 +53,11 @@ public class Main {
         QuizSession quizSession = new QuizSession("firstSession");
         quizSession.setQuizId("firstQuiz");
         params.put("quizSession", quizSession);
+        Flyway flyway = Flyway.configure()
+            .dataSource(System.getenv("DATABASE_URL"), System.getenv().get("PGUSER"), System.getenv("PGPASSWORD"))
+            .load();
+        flyway.migrate();
+        System.out.println("Migration successful!");
         app.ws("/quiz/{id}", ws -> {
             ws.onConnect(ctx -> { 
                 System.out.println("Connected user");
