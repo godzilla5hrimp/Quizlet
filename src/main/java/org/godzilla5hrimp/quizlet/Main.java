@@ -53,10 +53,9 @@ public class Main {
         QuizSession quizSession = new QuizSession("firstSession");
         quizSession.setQuizId("firstQuiz");
         params.put("quizSession", quizSession);
-        System.out.println("dbUrl:" + System.getenv("DATABASE_URL") + "; dbUser:" + System.getenv().get("PGUSER") + ";");
         Flyway flyway = Flyway.configure()
             .dataSource(System.getenv("DATABASE_URL").toString(), 
-                System.getenv().get("PGUSER").toString(), System.getenv("PGPASSWORD").toString())
+                System.getenv().get("POSTGRES_USER").toString(), System.getenv("POSTGRES_PASSWORD").toString())
             .load();
         flyway.migrate();
         System.out.println("Migration successful!");
