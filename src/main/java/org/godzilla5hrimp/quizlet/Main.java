@@ -14,6 +14,7 @@ import gg.jte.output.StringOutput;
 import gg.jte.resolve.DirectoryCodeResolver;
 
 import org.flywaydb.core.Flyway;
+import org.godzilla5hrimp.quizlet.controllers.QuizController;
 import org.godzilla5hrimp.quizlet.db.DBEntityManager;
 import org.godzilla5hrimp.quizlet.service.answer.Answer;
 import org.godzilla5hrimp.quizlet.service.question.Question;
@@ -43,9 +44,18 @@ public class Main {
         String dbName = System.getenv("POSTGRES_DB");
         String dbUser = System.getenv("POSTGRES_USER");
         String dbPass = System.getenv("POSTGRES_PASSWORD");
-        DBEntityManager entityManager = new DBEntityManager();
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("myPersistenceUnit");
+        Map<String, String> jpaProperties = new HashMap<>();
+        jpaProperties.put("jakarta.persistence.jdbc.driver", "org.postgresql.Driver");
+        jpaProperties.put("jakarta.persistence.jdbc.url", System.getenv("DATABASE_URL"));
+        jpaProperties.put("jakarta.persistence.jdbc.user", System.getenv("POSTGRES_USER"));
+        jpaProperties.put("jakarta.persistence.jdbc.password", System.getenv("POSTGRES_PASSWORD"));
+        jpaProperties.put("hibernate.hbm2ddl.auto", "update"); // or "create-drop"
+        jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        jpaProperties.put("hibernate.show_sql", "true");
+        jpaProperties.put("hibernate.format_sql", "true");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("myPersistenceUnit", jpaProperties);
         EntityManager em = emf.createEntityManager();
+        QuizController quizController = new QuizController(app);
         // trying out JPA persistance
         Question question = new Question("How are you today?", "");
         List<Answer> answerList = Arrays.asList(new Answer("Good", true), new Answer("Bad", false), new Answer("So-so", false), new Answer("Never Better", false));
@@ -94,12 +104,6 @@ public class Main {
             templateEngine.render("welcome.jte", params, output);
             ctx.result(output.toString());
             ctx.contentType(String.valueOf(ContentType.Html));
-        });
-        app.post("/newQuiz/{quizName}", ctx -> {
-            em.getTransaction().begin();
-            em.persist(new Quiz(ctx.pathParam("quizName")));
-            em.getTransaction().commit();
-            System.out.print("persisted quiz entity");
         });
         app.put("/quiz/{quizId}", ctx -> {
             JsonObject quizConfig = new Gson().fromJson(ctx.body(), JsonObject.class);
