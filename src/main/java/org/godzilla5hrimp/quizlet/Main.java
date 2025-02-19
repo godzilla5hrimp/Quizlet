@@ -1,6 +1,11 @@
 package org.godzilla5hrimp.quizlet;
 
 import io.javalin.Javalin;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.spi.PersistenceProvider;
+import lombok.extern.slf4j.Slf4j;
 import gg.jte.CodeResolver;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
@@ -9,14 +14,16 @@ import gg.jte.output.StringOutput;
 import gg.jte.resolve.DirectoryCodeResolver;
 
 import org.flywaydb.core.Flyway;
+import org.godzilla5hrimp.quizlet.db.DBEntityManager;
 import org.godzilla5hrimp.quizlet.service.answer.Answer;
 import org.godzilla5hrimp.quizlet.service.question.Question;
 import org.godzilla5hrimp.quizlet.service.quiz.Quiz;
 import org.godzilla5hrimp.quizlet.service.quizSession.QuizSession;
 
-import com.auth0.jwt.algorithms.Algorithm;
-
-import com.zaxxer.hikari.HikariConfig;  
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 import java.io.IOException;
 import java.nio.channels.ClosedChannelException;
@@ -24,25 +31,24 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-
 public class Main {
 
     public static void main(String[] args) throws IOException {
         CodeResolver codeResolver = new DirectoryCodeResolver(Path.of("src/main/jte")); // This is the directory where your .jte files are located.
         TemplateEngine templateEngine = TemplateEngine.create(codeResolver, ContentType.Html); // Two choices: Plain or Html
         Javalin app = Javalin.create().start(7000);
-        Algorithm algorithm = Algorithm.HMAC256("very_secret");
-        
-        System.out.println(algorithm);
-        HikariConfig config = new HikariConfig(""); //TODO: set up a HikariCP property file        
-        config.setUsername(System.getenv().get("quizletClient"));
-        config.setPassword(System.getenv().get("quizletClientPsw"));
         Quiz quiz = new Quiz("firstQuiz");
-        //quiz.setQuestionIdList(Arrays.asList("1"));
+        String dbHost = System.getenv("PGHOST");
+        String dbPort = System.getenv("PGPORT");
+        String dbName = System.getenv("POSTGRES_DB");
+        String dbUser = System.getenv("POSTGRES_USER");
+        String dbPass = System.getenv("POSTGRES_PASSWORD");
+        DBEntityManager entityManager = new DBEntityManager();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("myPersistenceUnit");
+        EntityManager em = emf.createEntityManager();
+        // trying out JPA persistance
         Question question = new Question("How are you today?", "");
         List<Answer> answerList = Arrays.asList(new Answer("Good", true), new Answer("Bad", false), new Answer("So-so", false), new Answer("Never Better", false));
-        //String file = "/home/hillayer/IdeaProjects/Quizlet/src/main/resources/templates/quizRoundScreen.json";
-        //String json = Arrays.toString(Files.readAllBytes(Paths.get(file)));
         Map<String, Object> params = new HashMap<>();
         params.put("question", question);
         params.put("answerList", answerList);
@@ -54,10 +60,7 @@ public class Main {
         quizSession.setQuizId("firstQuiz");
         params.put("quizSession", quizSession);
         Flyway flyway = Flyway.configure()
-            .dataSource("jdbc:postgresql://" + System.getenv("PGHOST").toString() + ":" + System.getenv("PGPORT").toString() 
-                    + "/" + System.getenv("POSTGRES_DB").toString(), 
-                System.getenv("POSTGRES_USER").toString(), 
-                System.getenv("POSTGRES_PASSWORD").toString())
+            .dataSource("jdbc:postgresql://" + dbHost + ":" + dbPort + "/" + dbName, dbUser, dbPass)
             .load();
         flyway.migrate();
         System.out.println("Migration successful!");
@@ -88,9 +91,18 @@ public class Main {
         });
         app.get("/", ctx -> {
             TemplateOutput output = new StringOutput();
-            templateEngine.render("quizRound.jte", params, output);
+            templateEngine.render("welcome.jte", params, output);
             ctx.result(output.toString());
             ctx.contentType(String.valueOf(ContentType.Html));
+        });
+        app.post("/newQuiz/{quizName}", ctx -> {
+            em.getTransaction().begin();
+            em.persist(new Quiz(ctx.pathParam("quizName")));
+            em.getTransaction().commit();
+            System.out.print("persisted quiz entity");
+        });
+        app.put("/quiz/{quizId}", ctx -> {
+            JsonObject quizConfig = new Gson().fromJson(ctx.body(), JsonObject.class);
         });
     }
 
