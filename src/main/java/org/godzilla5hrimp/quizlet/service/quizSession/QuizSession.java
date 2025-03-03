@@ -1,18 +1,35 @@
 package org.godzilla5hrimp.quizlet.service.quizSession;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import io.javalin.websocket.WsConnectContext;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Entity
+@Table(name = "quiz_session")
 public class QuizSession {
-    private String id;
-    private String quizId;
-    private ArrayList<String> usersConnected;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "quiz_id")
+    private Long quizId;
+    @Column(name = "users_connected")
+    private ArrayList<Long> usersConnected;
+    @Column(name = "time_started")
+    private Date timeStarted;
+    @Column(name = "time_ended")
+    private Date timeEnded;
     private HashMap<String, WsConnectContext> usersSessions;
 
     public QuizSession(final String id) {

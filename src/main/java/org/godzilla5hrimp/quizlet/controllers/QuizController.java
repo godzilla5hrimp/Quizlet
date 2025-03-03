@@ -1,6 +1,6 @@
 package org.godzilla5hrimp.quizlet.controllers;
 
-import org.godzilla5hrimp.quizlet.db.quiz.QuizDao;
+import org.godzilla5hrimp.quizlet.db.QuizDao;
 import org.godzilla5hrimp.quizlet.service.quiz.Quiz;
 
 import com.fasterxml.jackson.core.io.JsonStringEncoder;

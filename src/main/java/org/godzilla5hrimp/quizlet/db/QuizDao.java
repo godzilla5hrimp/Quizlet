@@ -1,10 +1,9 @@
-package org.godzilla5hrimp.quizlet.db.quiz;
+package org.godzilla5hrimp.quizlet.db;
 
 import org.godzilla5hrimp.quizlet.service.quiz.Quiz;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.RollbackException;
 import jakarta.persistence.TransactionRequiredException;
 import lombok.extern.slf4j.Slf4j;
@@ -12,18 +11,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class QuizDao {
 
-    EntityManager em;
+    Session session;
 
     public QuizDao() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("myPersistenceUnit");
-        this.em = emf.createEntityManager();
+        this.session = HibernateUtil.getSessionFactory().openSession();
     }
 
     public boolean saveQuiz(final Quiz quiz) {
         try {
-            em.getTransaction().begin();
-            em.persist(quiz);
-            em.getTransaction().commit();
+            Transaction transaction = session.beginTransaction();
+            session.persist(quiz);
+            transaction.commit();
+            session.close();
             return true;
         } catch(IllegalStateException | RollbackException e) {
             log.error("error when saving quiz [{}] with exception {}", quiz.getId(), e.getStackTrace());
@@ -33,9 +32,10 @@ public class QuizDao {
 
     public boolean deleteQuiz(final Quiz quiz) {
         try {
-            em.getTransaction().begin();
-            em.remove(quiz);
-            em.getTransaction().commit();
+            Transaction transaction = session.beginTransaction();
+            session.remove(quiz);
+            transaction.commit();
+            session.close();
             return true;
         } catch(IllegalStateException|IllegalArgumentException|TransactionRequiredException e) {
             log.error("error when deleting quiz [{}] with exception {}", quiz.getId(), e.getStackTrace());
@@ -45,9 +45,10 @@ public class QuizDao {
 
     public Quiz getQuiz(final String quizId) {
         try {
-            em.getTransaction().begin();
-            Quiz result = em.find(Quiz.class, quizId);
-            em.getTransaction().commit();
+            Transaction transaction = session.beginTransaction();
+            Quiz result = session.find(Quiz.class, quizId);
+            transaction.commit();
+            session.close();
             return result;
         } catch(IllegalArgumentException|IllegalStateException e) {
             log.error("error when fetching quiz [{}] with exception {}", quizId, e.getStackTrace());

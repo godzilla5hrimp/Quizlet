@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
     @Column(name = "quiz_name")
     private String quizName;
     @Column(name = "questions_list")

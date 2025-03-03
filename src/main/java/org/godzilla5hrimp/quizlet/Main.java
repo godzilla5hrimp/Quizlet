@@ -53,8 +53,8 @@ public class Main {
         jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         jpaProperties.put("hibernate.show_sql", "true");
         jpaProperties.put("hibernate.format_sql", "true");
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("myPersistenceUnit", jpaProperties);
-        EntityManager em = emf.createEntityManager();
+        // EntityManagerFactory emf = Persistence.createEntityManagerFactory("myPersistenceUnit", jpaProperties);
+        // EntityManager em = emf.createEntityManager();
         QuizController quizController = new QuizController(app);
         // trying out JPA persistance
         Question question = new Question("How are you today?", "");
