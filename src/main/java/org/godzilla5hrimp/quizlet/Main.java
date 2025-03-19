@@ -66,48 +66,48 @@ public class Main {
         final String currentDomain = System.getenv("RAILWAY_PUBLIC_DOMAIN");
         params.put("currentDomain", currentDomain);
         //params.put("jsonEditorSchema", json);
-        QuizSession quizSession = new QuizSession("firstSession");
-        quizSession.setQuizId("firstQuiz");
-        params.put("quizSession", quizSession);
+        //QuizSession quizSession = new QuizSession();
+        //params.put("quizSession", quizSession);
         Flyway flyway = Flyway.configure()
             .dataSource("jdbc:postgresql://" + dbHost + ":" + dbPort + "/" + dbName, dbUser, dbPass)
             .load();
         flyway.migrate();
         System.out.println("Migration successful!");
-        app.ws("/quiz/{id}", ws -> {
-            ws.onConnect(ctx -> { 
-                System.out.println("Connected user");
-                ctx.enableAutomaticPings(10, TimeUnit.SECONDS, null);
-                UUID userId = UUID.randomUUID();
-                ctx.send("welcome");
-                ctx.attribute("userId", userId.toString());
-                if (quizSession.userConnected(ctx.attribute("userId"), ctx)) {
-                    ctx.enableAutomaticPings(10, TimeUnit.MILLISECONDS, null);
-                }
-        });
-            ws.onMessage(ctx -> {
-                System.out.println("user connected:" + ctx.message());
-            });
+        // TODO: move to controllers
+        // app.ws("/quiz/{id}", ws -> {
+        //     ws.onConnect(ctx -> { 
+        //         System.out.println("Connected user");
+        //         ctx.enableAutomaticPings(10, TimeUnit.SECONDS, null);
+        //         UUID userId = UUID.randomUUID();
+        //         ctx.send("welcome");
+        //         ctx.attribute("userId", userId.toString());
+        //         if (quizSession.userConnected(ctx.attribute("userId"), ctx)) {
+        //             ctx.enableAutomaticPings(10, TimeUnit.MILLISECONDS, null);
+        //         }
+        // });
+        //     ws.onMessage(ctx -> {
+        //         System.out.println("user connected:" + ctx.message());
+        //     });
 
-            ws.onClose(ctx -> {
-                quizSession.userDisconected(ctx.attribute("userId"));
-                System.out.println("user disconnected");
-            });
-            ws.onError(ctx -> {
-                if (ctx.error() instanceof ClosedChannelException) {
-                    quizSession.userDisconected(ctx.attribute("userId"));
-                }
-            });
-        });
-        app.get("/", ctx -> {
-            TemplateOutput output = new StringOutput();
-            templateEngine.render("welcome.jte", params, output);
-            ctx.result(output.toString());
-            ctx.contentType(String.valueOf(ContentType.Html));
-        });
-        app.put("/quiz/{quizId}", ctx -> {
-            JsonObject quizConfig = new Gson().fromJson(ctx.body(), JsonObject.class);
-        });
+        //     ws.onClose(ctx -> {
+        //         quizSession.userDisconected(ctx.attribute("userId"));
+        //         System.out.println("user disconnected");
+        //     });
+        //     ws.onError(ctx -> {
+        //         if (ctx.error() instanceof ClosedChannelException) {
+        //             quizSession.userDisconected(ctx.attribute("userId"));
+        //         }
+        //     });
+        // });
+        // app.get("/", ctx -> {
+        //     TemplateOutput output = new StringOutput();
+        //     templateEngine.render("welcome.jte", params, output);
+        //     ctx.result(output.toString());
+        //     ctx.contentType(String.valueOf(ContentType.Html));
+        // });
+        // app.put("/quiz/{quizId}", ctx -> {
+        //     JsonObject quizConfig = new Gson().fromJson(ctx.body(), JsonObject.class);
+        // });
     }
 
 }

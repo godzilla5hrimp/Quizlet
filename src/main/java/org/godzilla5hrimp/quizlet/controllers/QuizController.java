@@ -3,9 +3,7 @@ package org.godzilla5hrimp.quizlet.controllers;
 import org.godzilla5hrimp.quizlet.db.QuizDao;
 import org.godzilla5hrimp.quizlet.service.quiz.Quiz;
 
-import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import io.javalin.Javalin;
