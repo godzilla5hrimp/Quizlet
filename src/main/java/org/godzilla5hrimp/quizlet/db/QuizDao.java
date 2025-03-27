@@ -43,7 +43,7 @@ public class QuizDao {
         }
     }
 
-    public Quiz getQuiz(final String quizId) {
+    public Quiz getQuiz(final Long quizId) {
         try {
             Transaction transaction = session.beginTransaction();
             Quiz result = session.find(Quiz.class, quizId);

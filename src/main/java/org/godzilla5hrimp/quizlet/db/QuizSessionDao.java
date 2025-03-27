@@ -4,6 +4,7 @@ import org.godzilla5hrimp.quizlet.service.quizSession.QuizSession;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import jakarta.persistence.RollbackException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -13,6 +14,19 @@ public class QuizSessionDao {
 
     public QuizSessionDao() {
         this.session = HibernateUtil.getSessionFactory().openSession();
+    }
+
+    public boolean saveSession(final QuizSession quizSession) {
+        try {
+            Transaction transaction = session.beginTransaction();
+            session.persist(quizSession);
+            transaction.commit();
+            session.close();
+            return true;
+        } catch(IllegalStateException | RollbackException e) {
+            log.error("error when saving quizSession [{}] with exception {}", quizSession.getId(), e.getStackTrace());
+            return false;
+        }
     }
 
     public QuizSession getSession(final Long sessionId) {

@@ -22,19 +22,7 @@ public class QuizGameWebSocket {
     }
 
     public Consumer<WsConfig> prepareConfig() {
-        Consumer result = new Consumer<WsConfig>() {
-        };
-        WsConfig result = new WsConfig();
-        result.onConnect(this::connectToSession);
-
+        QuizSessionWsConsumer result = new QuizSessionWsConsumer();
         return result;
-    }
-
-    public void connectToSession(final WsConnectContext ctx) {
-
-    }
-
-    public void getQuestion(final Long questionId) {
-        JsonObject result = JsonParser.parseString(new Gson().toJson(questionDao.getQuestion(questionId))).getAsJsonObject();
     }
 }

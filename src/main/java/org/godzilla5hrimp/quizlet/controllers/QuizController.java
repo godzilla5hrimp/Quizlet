@@ -30,7 +30,7 @@ public class QuizController {
 
     public void getQuiz(final Context ctx) {
         try {
-            Quiz result = quizDao.getQuiz(ctx.pathParam("quizId"));
+            Quiz result = quizDao.getQuiz(Long.valueOf(ctx.pathParam("quizId")));
             if (!result.equals(null)) {
                 ctx.json(result);
             } else {
