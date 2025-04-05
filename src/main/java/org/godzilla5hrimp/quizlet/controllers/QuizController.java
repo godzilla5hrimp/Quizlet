@@ -19,7 +19,8 @@ public class QuizController {
 
     public QuizController(final Javalin app) {
         this.quizDao = new QuizDao();
-        app.post("/quiz/{quizId}", this::saveQuiz);
+        //todo: change to put request
+        app.put("/quiz/{quizId}", this::saveQuiz);
         app.post("/quiz", this::saveQuiz);
         app.get("/quiz/get-all", this::getAll);
         app.get("/quiz/{quizId}", this::getQuiz);
@@ -51,6 +52,18 @@ public class QuizController {
         } catch(Exception e) {
             log.error("error fetching quiz with exception {}", e);
         }
+    }
+
+    public void updateQuiz(final Context ctx) {
+         Quiz quiz = new Gson().fromJson(ctx.body(), Quiz.class);
+         if (!quiz.equals(null)) {
+             quizDao.updateQuiz(quiz);
+             ctx.status(200);
+             ctx.result("success");
+         } else {
+             ctx.status(500);
+             ctx.result("internal server error");
+         }
     }
 
     public void getAll(final Context ctx) {

@@ -64,6 +64,23 @@ public class QuizDao {
         }
     }
 
+    public boolean updateQuiz(final Quiz quiz) {
+        try {
+            // Transaction transaction = session.beginTransaction();
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            quiz.setCreatedDate(new Date().from(Instant.now()));
+            quiz.setUpdatedDate(new Date().from(Instant.now()));
+            em.merge(quiz);
+            transaction.commit();
+            log.info("saved quiz entity with id [{}]", quiz.getId());
+            return true;
+        } catch(IllegalStateException | RollbackException e) {
+            log.error("error when saving quiz [{}] with exception: {} ", quiz.getId(), e);
+            return false;
+        }
+    }
+
     public List<Quiz> getAll() {
         try {
             Query query = em.createQuery("select q from Quiz q");

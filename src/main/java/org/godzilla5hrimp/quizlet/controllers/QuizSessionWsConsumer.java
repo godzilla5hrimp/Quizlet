@@ -4,7 +4,6 @@ import java.util.function.Consumer;
 
 import org.godzilla5hrimp.quizlet.db.QuizDao;
 import org.godzilla5hrimp.quizlet.db.QuizSessionDao;
-import org.godzilla5hrimp.quizlet.service.quiz.Quiz;
 import org.godzilla5hrimp.quizlet.service.quizSession.QuizSession;
 
 import io.javalin.websocket.WsConfig;
