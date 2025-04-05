@@ -1,4 +1,4 @@
-create table quiz_user (
-    id bigint not null, 
-    user_oauth text
+CREATE TABLE quiz_user (
+    id UUID PRIMARY KEY, 
+    user_oauth TEXT
 );

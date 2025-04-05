@@ -7,74 +7,74 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.RollbackException;
 import javax.persistence.TransactionRequiredException;
 
-import org.godzilla5hrimp.quizlet.service.question.Question;
+import org.godzilla5hrimp.quizlet.service.answer.Answer;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class QuestionDao {
-    
+public class AnswerDao {
+        
     private EntityManager em;
 
-    public QuestionDao() {
+    public AnswerDao() {
         this.em = JpaUtil.getEntityManagerFactory().createEntityManager();
     }
 
-    public boolean saveQuestion(final Question question) {
+    public boolean saveAnswer(final Answer answer) {
         try {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
-            em.persist(question);
+            em.persist(answer);
             transaction.commit();
             return true;
         } catch(IllegalStateException | RollbackException e) {
-            log.error("error when saving question [{}] with exception {}", question.getId(), e.getStackTrace());
+            log.error("error when saving answer [{}] with exception {}", answer.getId(), e.getStackTrace());
             return false;
         }
     } 
 
-    public boolean deleteQuestion(final Question question) {
+    public boolean deleteAnswer(final Answer answer) {
         try {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
-            em.remove(question);
+            em.remove(answer);
             transaction.commit();
             return true;
         } catch(IllegalStateException|IllegalArgumentException|TransactionRequiredException e) {
-            log.error("error when deleting question [{}] with exception {}", question.getId(), e.getStackTrace());
+            log.error("error when deleting answer [{}] with exception {}", answer.getId(), e.getStackTrace());
             return false;
         }
     }
 
-    public boolean updateQuestion(final Question question) {
+    public Answer getAnswer(final Long answerId) {
         try {
-            EntityTransaction transaction = em.getTransaction();
-            transaction.begin();
-            em.merge(question);
-            transaction.commit();
-            return true;
-        } catch(IllegalStateException | RollbackException e) {
-            log.error("error when saving question [{}] with exception {}", question.getId(), e.getStackTrace());
-            return false;
-        }
-    }
-
-    public Question getQuestion(final Long questionId) {
-        try {
-            Question result = em.find(Question.class, questionId);
+            Answer result = em.find(Answer.class, answerId);
             return result;
         } catch(IllegalArgumentException|IllegalStateException e) {
-            log.error("error when fetching question [{}] with exception {}", questionId, e);
+            log.error("error when fetching answer [{}] with exception {}", answerId, e);
             return null;
         }
     }
 
-    public List<Question> getAll() {
+    public boolean updateAnswer(final Answer answer) {
         try {
-            List<Question> result = em.createQuery("select q from Question q").getResultList();
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            em.merge(answer);
+            transaction.commit();
+            return true;
+        } catch(IllegalStateException | RollbackException e) {
+            log.error("error when saving answer [{}] with exception {}", answer.getId(), e.getMessage());
+            return false;
+        }
+    }
+
+    public List<Answer> getAll() {
+        try {
+            List<Answer> result = em.createQuery("select a from Answer a").getResultList();
             return result;
         } catch(IllegalArgumentException|IllegalStateException e) {
-            log.error("error when fetching all questions with exception {}", e);
+            log.error("error when fetching all answers with exception {}", e);
             return null;
         }
     }

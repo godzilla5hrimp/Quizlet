@@ -20,6 +20,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
-    @Column(name = "user_oauth")
-    private String userOauth;
+    @Column(name = "user_email")
+    private String userEmail;
 }

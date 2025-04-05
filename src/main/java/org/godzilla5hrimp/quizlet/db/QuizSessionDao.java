@@ -1,27 +1,29 @@
 package org.godzilla5hrimp.quizlet.db;
 
-import org.godzilla5hrimp.quizlet.service.quizSession.QuizSession;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.RollbackException;
 
-import jakarta.persistence.RollbackException;
+import org.godzilla5hrimp.quizlet.service.quizSession.QuizSession;
+
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class QuizSessionDao {
 
-    Session session;
+    EntityManager em;
 
     public QuizSessionDao() {
-        this.session = HibernateUtil.getSessionFactory().openSession();
+        this.em = JpaUtil.getEntityManagerFactory().createEntityManager();
     }
 
     public boolean saveSession(final QuizSession quizSession) {
         try {
-            Transaction transaction = session.beginTransaction();
-            session.persist(quizSession);
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            em.persist(quizSession);
             transaction.commit();
-            session.close();
             return true;
         } catch(IllegalStateException | RollbackException e) {
             log.error("error when saving quizSession [{}] with exception {}", quizSession.getId(), e.getStackTrace());
@@ -31,10 +33,7 @@ public class QuizSessionDao {
 
     public QuizSession getSession(final Long sessionId) {
          try {
-            Transaction transaction = session.beginTransaction();
-            QuizSession result = session.find(QuizSession.class, sessionId);
-            transaction.commit();
-            session.close();
+            QuizSession result = em.find(QuizSession.class, sessionId);
             return result;
         } catch(IllegalArgumentException|IllegalStateException e) {
             log.error("error when fetching session [{}] with exception {}", sessionId, e.getStackTrace());

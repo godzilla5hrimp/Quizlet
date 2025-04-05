@@ -1,65 +1,41 @@
 package org.godzilla5hrimp.quizlet.service.answer;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-import gg.jte.TemplateEngine;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
 
-import org.godzilla5hrimp.quizlet.utils.ColourScheme;
-
 @Getter
 @Setter
+@Entity
+@Table(name = "answer")
 public class Answer {
-    @JsonValue
+    @Id
+    private UUID id;
+    @Column(name = "text_answer")
     private String textAnswer;
-    @JsonValue
-    private ColourScheme.Colour answerColour;
-    @JsonValue
-    private Shape answerShape;
-    @JsonValue
+    @Column(name = "colour_answer")
+    private String answerColour;
+    @Column(name = "shape_answer")
+    private String answerShape;
+    @Column(name = "is_right")
     private Boolean isRightAnswer;
 
-    //TODO: add jackson annotations to be able to use json values for the question editing
+    public Answer() {
+        this.id = UUID.randomUUID();
+        this.answerColour = "blue";
+        this.answerShape = Shape.STAR.toString();
+    }
+
     public Answer(final String textAnswer, final Boolean isRightAnswer) {
         this.textAnswer = textAnswer;
-        this.answerShape = Shape.STAR;
+        this.answerShape = Shape.STAR.toString();
         this.isRightAnswer = isRightAnswer;
-    }
-
-    public void setRightAnswer(boolean isRightAnswer) {
-        this.isRightAnswer = isRightAnswer;
-    }
-
-    public boolean isRightAnswer() {
-        return isRightAnswer;
-    }
-
-    public String getTextAnswer() {
-        return textAnswer;
-    }
-
-    public void setTextAnswer(String textAnswer) {
-        this.textAnswer = textAnswer;
-    }
-
-    public ColourScheme.Colour getAnswerColour() {
-        return answerColour;
-    }
-
-    public void setAnswerColour(ColourScheme.Colour answerColour) {
-        this.answerColour = answerColour;
-    }
-
-    public Shape getAnswerShape() {
-        return answerShape;
-    }
-
-    public void setAnswerShape(Shape answerShape) {
-        this.answerShape = answerShape;
-    }
-
-    public void drawAnswerBlock(final TemplateEngine templateEngine, final int answerId) {
-
     }
 
     public enum Shape {

@@ -1,9 +1,7 @@
 package org.godzilla5hrimp.quizlet.db;
 
-import java.util.Arrays;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import lombok.extern.slf4j.Slf4j;
 
 public class DBEntityManager {
 

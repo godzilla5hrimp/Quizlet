@@ -1,19 +1,16 @@
 package org.godzilla5hrimp.quizlet.service.quiz;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
-import com.google.gson.JsonObject;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -23,14 +20,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Entity
 @Table(name = "quiz")
-public class Quiz {
+@XmlRootElement
+public class Quiz implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
     @Column(name = "quiz_name")
     private String quizName;
     @Column(name = "questions_list")
-    private List<String> questionsList;
+    private String questionsList;
     @Column(name = "created_date")
     private Date createdDate;
     @Column(name = "updated_date")
@@ -44,9 +41,12 @@ public class Quiz {
     @Column(name = "is_private")
     private boolean isPrivate;
 
-    public Quiz() {}
+    public Quiz() {
+        this.id = UUID.randomUUID();
+    }
 
     public Quiz(final String quizName) {
+        this.id = UUID.randomUUID();
         this.createdDate = Date.from(Instant.now());
         this.quizName = quizName.isEmpty() || quizName.equals(null) ? "Unnamed Quiz" : quizName;
     }

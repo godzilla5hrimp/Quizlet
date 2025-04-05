@@ -36,7 +36,7 @@ public class QuizSession {
     private Integer questionsNumber;
 
     public QuizSession(final Quiz quizData) {
-        this.questionsNumber = quizData.getQuestionsList().size();
+        this.questionsNumber = 0;
     }
 
     public void connectUser(final WsContext userSessionId) {
@@ -51,7 +51,7 @@ public class QuizSession {
         return usersSessions.contains(userSessionId) ? true : false;
     }
 
-    public void sendUpdate(final Quiz quiData) {
+    public void sendUpdate(final Quiz quizData) {
         for (WsContext context : usersSessions) {
             context.send("update");
         }

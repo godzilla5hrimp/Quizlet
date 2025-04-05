@@ -1,41 +1,52 @@
 package org.godzilla5hrimp.quizlet.db;
 
-import org.godzilla5hrimp.quizlet.service.quiz.Quiz;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import java.time.Instant;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
-import jakarta.persistence.RollbackException;
-import jakarta.persistence.TransactionRequiredException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
+import javax.persistence.RollbackException;
+import javax.persistence.TransactionRequiredException;
+
+import org.godzilla5hrimp.quizlet.service.quiz.Quiz;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class QuizDao {
 
-    Session session;
+    EntityManager em;
 
     public QuizDao() {
-        this.session = HibernateUtil.getSessionFactory().openSession();
+        this.em = JpaUtil.getEntityManagerFactory().createEntityManager();
     }
 
-    public boolean saveQuiz(final Quiz quiz) {
+    public boolean saveQuiz(Quiz quiz) {
         try {
-            Transaction transaction = session.beginTransaction();
-            session.persist(quiz);
+            // Transaction transaction = session.beginTransaction();
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            quiz.setCreatedDate(new Date().from(Instant.now()));
+            quiz.setUpdatedDate(new Date().from(Instant.now()));
+            em.persist(quiz);
             transaction.commit();
-            session.close();
+            log.info("saved quiz entity with id [{}]", quiz.getId());
             return true;
         } catch(IllegalStateException | RollbackException e) {
-            log.error("error when saving quiz [{}] with exception {}", quiz.getId(), e.getStackTrace());
+            log.error("error when saving quiz [{}] with exception: {} ", quiz.getId(), e);
             return false;
         }
     } 
 
     public boolean deleteQuiz(final Quiz quiz) {
         try {
-            Transaction transaction = session.beginTransaction();
-            session.remove(quiz);
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            em.remove(quiz);
             transaction.commit();
-            session.close();
             return true;
         } catch(IllegalStateException|IllegalArgumentException|TransactionRequiredException e) {
             log.error("error when deleting quiz [{}] with exception {}", quiz.getId(), e.getStackTrace());
@@ -43,15 +54,23 @@ public class QuizDao {
         }
     }
 
-    public Quiz getQuiz(final Long quizId) {
+    public Quiz getQuiz(final String quizId) {
         try {
-            Transaction transaction = session.beginTransaction();
-            Quiz result = session.find(Quiz.class, quizId);
-            transaction.commit();
-            session.close();
+            Quiz result = em.find(Quiz.class, UUID.fromString(quizId));
             return result;
         } catch(IllegalArgumentException|IllegalStateException e) {
-            log.error("error when fetching quiz [{}] with exception {}", quizId, e.getStackTrace());
+            log.error("error when fetching quiz [{}] with exception {}", UUID.fromString(quizId), e.getStackTrace());
+            return null;
+        }
+    }
+
+    public List<Quiz> getAll() {
+        try {
+            Query query = em.createQuery("select q from Quiz q");
+            List<Quiz> result = query.getResultList();
+            return result;
+        } catch(IllegalArgumentException|IllegalStateException e) {
+            log.error("error when fetching all quizes with exception {}", e.getStackTrace());
             return null;
         }
     }
