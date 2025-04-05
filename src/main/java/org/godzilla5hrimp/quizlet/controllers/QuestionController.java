@@ -41,24 +41,23 @@ public class QuestionController {
 
     public void getQuesiton(final Context ctx) {
         try {
-            Question result = questionDao.getQuestion(Long.valueOf(ctx.pathParam("questionId")));
+            Question result = questionDao.getQuestion(UUID.fromString(ctx.pathParam("questionId")));
             if (!result.equals(null)) {
                 ctx.json(result);
             } else {
-                JsonObject errObject = new JsonObject();
-                errObject.add("error", new Gson().toJsonTree("error fetching question"));
-                ctx.json(errObject);
+                ctx.status(500);
+                ctx.result("internal server error");
             }
         } catch(Exception e) {
-            log.error("error fetching question with exception {}", e.getStackTrace().toString());
+            log.error("error fetching question with exception {}", e);
         }
     }
 
     public void updateQuestion(Context ctx) {
         try {
             Question questionToUpdate = new Gson().fromJson(ctx.body(), Question.class);
-            questionToUpdate.setId(UUID.fromString(ctx.pathParam("questionId")));
             if (!questionToUpdate.equals(null)) {
+                questionToUpdate.setId(UUID.fromString(ctx.pathParam("questionId")));
                 questionDao.updateQuestion(questionToUpdate);
             } else {
                 ctx.json("error");

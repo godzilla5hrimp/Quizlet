@@ -1,6 +1,7 @@
 package org.godzilla5hrimp.quizlet.db;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -46,7 +47,7 @@ public class AnswerDao {
         }
     }
 
-    public Answer getAnswer(final Long answerId) {
+    public Answer getAnswer(final UUID answerId) {
         try {
             Answer result = em.find(Answer.class, answerId);
             return result;

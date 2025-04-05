@@ -2,20 +2,18 @@ package org.godzilla5hrimp.quizlet.service.quizSession;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.UUID;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.godzilla5hrimp.quizlet.service.quiz.Quiz;
 
 import com.google.gson.JsonObject;
 
-import io.javalin.websocket.WsConnectContext;
 import io.javalin.websocket.WsContext;
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +22,14 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 @Entity
+@Table(name = "quiz_session")
 public class QuizSession {    
-    private Long id;
-    private Long quizId;
-    private ArrayList<Long> usersConnected;
+    @Id
+    private UUID id;
+    @Column(name = "quiz_id")
+    private UUID quizId;
+    @Column(name = "users_connected")
+    private String usersConnected;
     private Date timeStarted;
     private Date timeEnded; 
     private ArrayList<WsContext> usersSessions;

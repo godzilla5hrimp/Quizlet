@@ -5,18 +5,12 @@ import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.flywaydb.core.Flyway;
 import org.godzilla5hrimp.quizlet.controllers.AnswerController;
 import org.godzilla5hrimp.quizlet.controllers.QuestionController;
 import org.godzilla5hrimp.quizlet.controllers.QuizController;
-import org.godzilla5hrimp.quizlet.service.answer.Answer;
-import org.godzilla5hrimp.quizlet.service.question.Question;
-import org.godzilla5hrimp.quizlet.service.quiz.Quiz;
+import org.godzilla5hrimp.quizlet.controllers.UserController;
 
 import gg.jte.CodeResolver;
 import gg.jte.ContentType;
@@ -39,6 +33,7 @@ public class Main {
         QuizController quizController = new QuizController(app);
         QuestionController questionController = new QuestionController(app);
         AnswerController answerController = new AnswerController(app);
+        UserController userController = new UserController(app);
     }
 
     private static void initializeDatabase(final String DB_URL, final String USER, final String PASSWORD) {

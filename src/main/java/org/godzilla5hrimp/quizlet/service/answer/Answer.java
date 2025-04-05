@@ -19,6 +19,7 @@ public class Answer {
     private UUID id;
     @Column(name = "text_answer")
     private String textAnswer;
+    //todo: have to add functionality to determine colour
     @Column(name = "colour_answer")
     private String answerColour;
     @Column(name = "shape_answer")

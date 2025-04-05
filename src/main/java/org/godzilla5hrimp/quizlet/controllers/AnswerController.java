@@ -1,6 +1,7 @@
 package org.godzilla5hrimp.quizlet.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.godzilla5hrimp.quizlet.db.AnswerDao;
 import org.godzilla5hrimp.quizlet.service.answer.Answer;
@@ -42,7 +43,7 @@ public class AnswerController {
 
     public void getAnswer(final Context ctx) {
         try {
-            Answer result = answerDao.getAnswer(Long.valueOf(ctx.pathParam("answerId")));
+            Answer result = answerDao.getAnswer(UUID.fromString(ctx.pathParam("answerId")));
             if (!result.equals(null)) {
                 ctx.json(result);
             } else {
@@ -51,7 +52,7 @@ public class AnswerController {
                 ctx.json(errObject);
             }
         } catch(Exception e) {
-            log.error("error fetching question with exception {}", e.getStackTrace().toString());
+            log.error("error fetching answer {} with exception {}", ctx.pathParam("answerId"), e);
         }
     }
 
@@ -59,6 +60,7 @@ public class AnswerController {
         try {
             Answer answerToUpdate = new Gson().fromJson(ctx.body(), Answer.class);
             if (!answerToUpdate.equals(null)) {
+                answerToUpdate.setId(UUID.fromString(ctx.pathParam("answerId")));
                 answerDao.updateAnswer(answerToUpdate);
             } else {
                 JsonObject errObject = new JsonObject();
@@ -76,12 +78,11 @@ public class AnswerController {
             if (!result.equals(null)) {
                 ctx.json(result);
             } else {
-                JsonObject errObject = new JsonObject();
-                errObject.add("error", new Gson().toJsonTree("error fetching question"));
-                ctx.json(errObject);
+                ctx.status(500);
+                ctx.result("internal server error");
             }
         } catch(Exception e) {
-            log.error("error fetching question with exception {}", e);
+            log.error("error fetching all question entities with exception {} ", e);
         }
     }
 }

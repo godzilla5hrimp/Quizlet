@@ -19,6 +19,7 @@ public class Question {
     private UUID id;
     @Column(name = "text_question")
     private String textQuestion;
+    //todo: add verification for the media URl
     @Column(name = "media_url")
     private String mediaURL;
     @Column(name = "is_multiple_answer_question")

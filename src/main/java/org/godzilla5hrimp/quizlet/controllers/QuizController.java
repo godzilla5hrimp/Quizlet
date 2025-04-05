@@ -1,6 +1,7 @@
 package org.godzilla5hrimp.quizlet.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.godzilla5hrimp.quizlet.db.QuizDao;
 import org.godzilla5hrimp.quizlet.service.quiz.Quiz;
@@ -20,9 +21,9 @@ public class QuizController {
     public QuizController(final Javalin app) {
         this.quizDao = new QuizDao();
         //todo: change to put request
-        app.put("/quiz/{quizId}", this::saveQuiz);
+        app.put("/quiz/{quizId}", this::updateQuiz);
         app.post("/quiz", this::saveQuiz);
-        app.get("/quiz/get-all", this::getAll);
+        app.get("/quiz/all", this::getAll);
         app.get("/quiz/{quizId}", this::getQuiz);
     }
     
@@ -57,9 +58,10 @@ public class QuizController {
     public void updateQuiz(final Context ctx) {
          Quiz quiz = new Gson().fromJson(ctx.body(), Quiz.class);
          if (!quiz.equals(null)) {
-             quizDao.updateQuiz(quiz);
-             ctx.status(200);
-             ctx.result("success");
+            quiz.setId(UUID.fromString(ctx.pathParam("quizId")));
+            quizDao.updateQuiz(quiz);
+            ctx.status(200);
+            ctx.result("success");
          } else {
              ctx.status(500);
              ctx.result("internal server error");

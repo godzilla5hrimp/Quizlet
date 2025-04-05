@@ -1,0 +1,1 @@
+ALTER TABLE quiz_user RENAME COLUMN user_oauth TO user_email;

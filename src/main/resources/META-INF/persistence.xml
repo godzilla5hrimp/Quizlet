@@ -5,6 +5,7 @@
     <class>org.godzilla5hrimp.quizlet.service.quiz.Quiz</class>
     <class>org.godzilla5hrimp.quizlet.service.question.Question</class>
     <class>org.godzilla5hrimp.quizlet.service.answer.Answer</class>
+    <class>org.godzilla5hrimp.quizlet.service.user.User</class>
     <properties>
             <!-- Database connection settings -->
         <property name="javax.persistence.jdbc.driver" value="${DB_DRIVER}"/>
