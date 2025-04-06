@@ -30,8 +30,11 @@ public class QuizSession {
     private UUID quizId;
     @Column(name = "users_connected")
     private String usersConnected;
-    private Date timeStarted;
-    private Date timeEnded; 
+    @Column(name = "date_started")
+    private Date dateStarted;
+    @Column(name = "date_ended")
+    private Date dateEnded;
+     
     private ArrayList<WsContext> usersSessions;
     private QuizSessionState state;
     private Integer quizStep = -1;

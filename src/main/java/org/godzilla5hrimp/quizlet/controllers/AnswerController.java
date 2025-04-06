@@ -24,6 +24,7 @@ public class AnswerController {
         app.put("/answer/{answerId}", this::updateAnswer);
         app.get("/answer/all", this::getAll);
         app.get("/answer/{answerId}", this::getAnswer);
+        app.delete("/answer/{answerId}", this::deleteAnswer);
     }
 
     public void saveAnswer(final Context ctx) {
@@ -83,6 +84,22 @@ public class AnswerController {
             }
         } catch(Exception e) {
             log.error("error fetching all question entities with exception {} ", e);
+        }
+    }
+
+    public void deleteAnswer(Context ctx) {
+        try {
+            UUID answerUuid = UUID.fromString(ctx.pathParam("answerId"));
+            if (!answerUuid.equals(null)) {
+                answerDao.deleteAnswer(answerUuid);
+                ctx.status(200);
+                ctx.result("success");
+            } else {
+                ctx.status(500);
+                ctx.result("internal server error");
+            }
+        } catch(Exception e) {
+            log.error("error fetching answer {} with exception {}", ctx.pathParam("answerId"), e);
         }
     }
 }

@@ -34,15 +34,16 @@ public class QuestionDao {
         }
     } 
 
-    public boolean deleteQuestion(final Question question) {
+    public boolean deleteQuestion(final UUID questionId) {
         try {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
-            em.remove(question);
+            Question questionToDelete = em.find(Question.class, questionId);
+            em.remove(questionToDelete);
             transaction.commit();
             return true;
         } catch(IllegalStateException|IllegalArgumentException|TransactionRequiredException e) {
-            log.error("error when deleting question [{}] with exception {}", question.getId(), e.getStackTrace());
+            log.error("error when deleting question [{}] with exception {}", questionId.toString(), e.getStackTrace());
             return false;
         }
     }

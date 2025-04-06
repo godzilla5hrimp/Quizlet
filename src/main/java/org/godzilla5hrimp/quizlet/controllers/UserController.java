@@ -23,6 +23,7 @@ public class UserController {
         app.post("/user", this::saveUser);
         app.get("/user/all", this::getAll);
         app.get("/user/{userId}", this::getUser);
+        app.delete("/user/{userId}", this::deleteUser);
     }
     
     public void saveUser(final Context ctx) {
@@ -71,6 +72,21 @@ public class UserController {
             List<User> result = userDao.getAllUsers();
             if (!result.equals(null)) {
                 ctx.json(result);
+            } else {
+                JsonObject errObject = new JsonObject();
+                errObject.add("error", new Gson().toJsonTree("error fetching all users"));
+                ctx.json(errObject);
+            }
+        } catch(Exception e) {
+            log.error("error fetching all users {}", e);
+        }
+    }
+
+    public void deleteUser(Context ctx) {
+        try {
+           final UUID userUuid = UUID.fromString(ctx.pathParam("userId"));
+            if (!userUuid.equals(null)) {
+                userDao.deleteUser(userUuid);
             } else {
                 JsonObject errObject = new JsonObject();
                 errObject.add("error", new Gson().toJsonTree("error fetching all users"));

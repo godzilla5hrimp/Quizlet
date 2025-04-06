@@ -25,6 +25,7 @@ public class QuizController {
         app.post("/quiz", this::saveQuiz);
         app.get("/quiz/all", this::getAll);
         app.get("/quiz/{quizId}", this::getQuiz);
+        app.delete("/quiz/{quizId}", this::delete);
     }
     
     public void saveQuiz(final Context ctx) {
@@ -83,4 +84,22 @@ public class QuizController {
         }
     }
     
+    public void delete(final Context ctx) {
+        try {
+            final UUID quizUuid = UUID.fromString(ctx.pathParam("quizId"));
+            if (!quizUuid.equals(null)) {
+                quizDao.deleteQuiz(quizUuid);
+                ctx.status(200);
+                ctx.result("success");
+            } else {
+                ctx.status(500);
+                ctx.result("internal server error");
+            }
+        } catch(Exception e) {
+            ctx.status(500);
+            ctx.result("internal server error");
+            log.error("error fetching all quizes {}", e);
+        }
+    }
+
 }

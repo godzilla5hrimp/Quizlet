@@ -24,6 +24,7 @@ public class QuestionController {
         app.put("/question/{questionId}", this::updateQuestion);
         app.get("/question/all", this::getAllQuestions);
         app.get("/question/{questionId}", this::getQuesiton);
+        app.delete("question/{questionId}", this::deleteQuestion);
     }
 
     public void saveQuestion(final Context ctx) {
@@ -79,6 +80,19 @@ public class QuestionController {
             }
         } catch(Exception e) {
             log.error("error fetching question with exception {}", e);
+        }
+    }
+
+    public void deleteQuestion(Context ctx) {
+        try {
+            UUID questionUUuid = UUID.fromString(ctx.pathParam("questionId"));
+            if (!questionUUuid.equals(null)) {
+                questionDao.deleteQuestion(questionUUuid);
+            } else {
+                ctx.json("error");
+            }
+        } catch(Exception e) {
+            log.error("error saving question with exception {}", e);
         }
     }
 }

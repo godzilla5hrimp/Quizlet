@@ -28,7 +28,7 @@ public class UserDao {
             transaction.commit();
             return true;
         } catch(IllegalStateException | RollbackException e) {
-            log.error("error when saving user [{}] with exception {}", user.getId().toString(), e.getStackTrace());
+            log.error("error when saving user [{}] with exception {}", user.getId().toString(), e);
             return false;
         }
     } 
@@ -37,7 +37,7 @@ public class UserDao {
         try {
             return em.find(User.class, userId);
         } catch(IllegalStateException | RollbackException e) {
-            log.error("error when fetching user [{}] with exception {}", userId.toString(), e.getStackTrace());
+            log.error("error when fetching user [{}] with exception {}", userId.toString(), e);
             return null;
         }
     }
@@ -50,7 +50,7 @@ public class UserDao {
             transaction.commit();
             return true;
         } catch(IllegalStateException | RollbackException e) {
-            log.error("error when updating user [{}] with exception {}", user.getId().toString(), e.getStackTrace());
+            log.error("error when updating user [{}] with exception {}", user.getId().toString(), e);
             return false;
         }
     }
@@ -59,11 +59,12 @@ public class UserDao {
         try {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
-            em.remove(userId);
+            User userToDelete = em.find(User.class, userId);
+            em.remove(userToDelete);
             transaction.commit();
             return true;
         } catch(IllegalStateException | RollbackException e) {
-            log.error("error when deleting user [{}] with exception {}", userId.toString(), e.getStackTrace());
+            log.error("error when deleting user [{}] with exception {}", userId.toString(), e);
             return false;
         }
     }
@@ -72,7 +73,7 @@ public class UserDao {
         try {
             return em.createQuery("select u from User u").getResultList();
         } catch(IllegalStateException | RollbackException e) {
-            log.error("error when fetching all users with exception {}", e.getStackTrace());
+            log.error("error when fetching all users with exception {}", e);
             return null;
         }
     }

@@ -41,15 +41,16 @@ public class QuizDao {
         }
     } 
 
-    public boolean deleteQuiz(final Quiz quiz) {
+    public boolean deleteQuiz(final UUID quiziUuid) {
         try {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
-            em.remove(quiz);
+            Quiz quizToDelete = em.find(Quiz.class, quiziUuid);
+            em.remove(quizToDelete);
             transaction.commit();
             return true;
         } catch(IllegalStateException|IllegalArgumentException|TransactionRequiredException e) {
-            log.error("error when deleting quiz [{}] with exception {}", quiz.getId(), e.getStackTrace());
+            log.error("error when deleting quiz [{}] with exception {}", quiziUuid.toString(), e.getStackTrace());
             return false;
         }
     }
@@ -87,7 +88,7 @@ public class QuizDao {
             List<Quiz> result = query.getResultList();
             return result;
         } catch(IllegalArgumentException|IllegalStateException e) {
-            log.error("error when fetching all quizes with exception {}", e.getStackTrace());
+            log.error("error when fetching all quizes with exception {}", e);
             return null;
         }
     }

@@ -29,20 +29,21 @@ public class AnswerDao {
             transaction.commit();
             return true;
         } catch(IllegalStateException | RollbackException e) {
-            log.error("error when saving answer [{}] with exception {}", answer.getId(), e.getStackTrace());
+            log.error("error when saving answer [{}] with exception {}", answer.getId(), e);
             return false;
         }
     } 
 
-    public boolean deleteAnswer(final Answer answer) {
+    public boolean deleteAnswer(final UUID answerUuid) {
         try {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
-            em.remove(answer);
+            Answer answerToDelete = em.find(Answer.class, answerUuid);
+            em.remove(answerToDelete);
             transaction.commit();
             return true;
         } catch(IllegalStateException|IllegalArgumentException|TransactionRequiredException e) {
-            log.error("error when deleting answer [{}] with exception {}", answer.getId(), e.getStackTrace());
+            log.error("error when deleting answer [{}] with exception {}", answerUuid.toString(), e);
             return false;
         }
     }
@@ -65,7 +66,7 @@ public class AnswerDao {
             transaction.commit();
             return true;
         } catch(IllegalStateException | RollbackException e) {
-            log.error("error when saving answer [{}] with exception {}", answer.getId(), e.getMessage());
+            log.error("error when saving answer [{}] with exception {}", answer.getId(), e);
             return false;
         }
     }
