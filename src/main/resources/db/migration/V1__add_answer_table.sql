@@ -1,6 +1,6 @@
-create table answer (
-    id text not null,
-    question_id text not null,
-    text_answer text,
-    shape_answer text
+CREATE TABLE IF NOT EXISTS answer (
+    id UUID PRIMARY KEY,
+    question_id UUID NOT NULL,
+    text_answer TEXT,
+    shape_answer TEXT
 );

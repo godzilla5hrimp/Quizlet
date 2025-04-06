@@ -1,42 +1,45 @@
 package org.godzilla5hrimp.quizlet.service.question;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Entity
+@Table(name = "question")
 public class Question {
-    private String id;
+    @Id
+    private UUID id;
+    @Column(name = "text_question")
     private String textQuestion;
+    //todo: add verification for the media URl
+    @Column(name = "media_url")
     private String mediaURL;
+    @Column(name = "is_multiple_answer_question")
     private Boolean isMultipleAnswerQuestion;
-    private List<String> answerList;
+    @Column(name = "answer_list")
+    private String answerList;
+
+    public Question() {
+        this.id = UUID.randomUUID();
+        this.answerList = "";
+    }
 
     public Question(final String textQuestion) {
+        this.id = UUID.randomUUID();
         this.textQuestion = textQuestion;
     }
 
     public Question(final String textQuestion, final String mediaURL) {
+        this.id = UUID.randomUUID();
         this.textQuestion = textQuestion;
-        this.mediaURL = mediaURL;
-    }
-
-    public String getTextQuestion() {
-        return textQuestion;
-    }
-
-    public void setTextQuestion(String textQuestion) {
-        this.textQuestion = textQuestion;
-    }
-
-    public String getMediaQuestions() {
-        return mediaURL;
-    }
-
-    public void setMediaQuestions(final String mediaQuestions) {
         this.mediaURL = mediaURL;
     }
 }

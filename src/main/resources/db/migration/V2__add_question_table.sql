@@ -1,7 +1,7 @@
-create table question (
-    id text not null,
-    is_multuple_answer_question boolean not null,
-    media_url text,
-    answer_list text[] not null,
-    correct_answer text not null
+CREATE TABLE question (
+    id UUID PRIMARY KEY,
+    is_multiple_answer_question BOOLEAN NOT NULL,
+    media_url TEXT,
+    answer_list TEXT NOT NULL,  -- H2 does not support arrays natively, storing as TEXT (comma-separated)
+    correct_answer TEXT NOT NULL
 );
